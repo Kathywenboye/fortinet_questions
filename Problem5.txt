@@ -1,0 +1,18 @@
+When testing service methods in JUnit test, we should write one set of tests for the services, 
+and another set of tests for the data access classes(DAOs) in isolation.
+
+The DAOs tests put the database tables into a known state for each test run. We can mock the 
+database APIs that access an in-memory database instead of the actual database. The DAO tests 
+will test that the database mappings and SQL are right. We can use DBUnit to initialize the 
+database with test data and to verify the contents of the database at the end of each test, 
+so each test can run against a known dataset. It will be easier to distinguish with separate 
+DAO tests if there are any database-level problems.
+
+The services can be tested using mocks for the DAOs. We can use mock objects to test the 
+service methods without having to really connect to back-end database. For example, we can 
+use Mockito to create a mock object and stub a method on it to simulate its behavior by 
+setting up an expectation on the method invocation during unit testing. By using Mockito, 
+we can test controllers by injecting mock services and set up services to use mock DAOs to 
+test the service layer. Because we limit database access to only DAO tests, we minimize the 
+total amount of database access our tests need, and we can run the tests much faster when 
+exercising a lot of different scenarios.
